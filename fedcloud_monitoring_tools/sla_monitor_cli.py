@@ -7,6 +7,7 @@ import yaml
 from fedcloud_monitoring_tools.accounting import Accounting
 from fedcloud_monitoring_tools.appdb import AppDB
 from fedcloud_monitoring_tools.goc import GOCDB
+from fedcloud_monitoring_tools.operations_portal import OpsPortal
 
 
 def check_site_slas(site, acct, appdb, goc, gocdb_sites):
@@ -61,7 +62,7 @@ def vo_in_map(vo, vo_map):
     return vo in flat_list
 
 
-def check_vo_sla(acct, appdb, goc, user_cert, vo_map, vo):
+def check_vo_sla(acct, appdb, goc, ops_portal, user_cert, vo_map, vo):
     if not vo_in_map(vo, vo_map):
         click.secho(
             "[ERR] VO {} not found in the map file provided".format(vo),
@@ -73,6 +74,12 @@ def check_vo_sla(acct, appdb, goc, user_cert, vo_map, vo):
     if vo not in all_vos_acct:
         click.secho(
             "[ERR] VO {} not found in Accounting Portal".format(vo), fg="red", bold=True
+        )
+        return
+    all_vos_ops_portal = ops_portal.get_vo_list()
+    if vo not in all_vos_ops_portal:
+        click.secho(
+            "[ERR] VO {} not found in Operations Portal".format(vo), fg="red", bold=True
         )
         return
     all_vos_gocdb = goc.get_sites_vo(user_cert, vo_map)
@@ -132,10 +139,10 @@ def main(
     acct = Accounting()
     goc = GOCDB()
     appdb = AppDB()
-    # should we also check VOs in operations portal?
+    ops_portal = OpsPortal()
 
     if vo:
-        check_vo_sla(acct, appdb, goc, user_cert, vo_map, vo)
+        check_vo_sla(acct, appdb, goc, ops_portal, user_cert, vo_map, vo)
     else:
         gocdb_sites = goc.get_sites_slas(user_cert, vo_map)
         if site:
