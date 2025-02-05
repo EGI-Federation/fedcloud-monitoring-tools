@@ -25,13 +25,51 @@ class GOCDB:
         groups = xmltodict.parse(response.text)["results"]["SERVICE_GROUP"]
         return groups
 
-    def get_sites_slas(self, cert_file, vo_map):
-        groups = self.get_sla_groups(cert_file)
+    def flatten_vo_map(self, vo_map):
         all_vos = []
         for vo in vo_map.values():
             if vo:
                 all_vos.extend(vo)
-        self.sla_vos = set(all_vos)
+        return set(all_vos)
+
+    def get_sites_vo(self, cert_file, vo_map):
+        groups = self.get_sla_groups(cert_file)
+        self.sla_vos = self.flatten_vo_map(vo_map)
+
+        sites_per_vo = {}
+        for group in groups:
+            m = re.search(SLA_GROUP_RE, group["NAME"])
+            if not m:
+                continue
+            sla_name = m.group(1)
+            vos = vo_map.get(sla_name)
+            if vos is not None and len(vos) != 1:
+                # SLA service groups in GOCDB with multiple VOs are special.
+                # All nova endpoints in the service group do not support all VOs.
+                # Therefore, a special value is added to be treated accordingly.
+                for vo in vos:
+                    sites_per_vo[vo] = ['sla-group-with-multiple-vos']
+                continue
+            elif vos is None:
+                # This SLA service group does not have a VO associated, skipping
+                continue
+            # from this point on, there will be only one VO in the SLA service group in GOCDB
+            # in these cases we can extract the list of providers supporting the VO properly
+            sla_vo = vos[0]
+            endpoints = group.get("SERVICE_ENDPOINT", [])
+            if not isinstance(endpoints, list):
+                endpoints = [endpoints]
+            sites_per_vo[sla_vo] = []
+            for endpoint in endpoints:
+                svc = self.get_endpoint_site(endpoint)
+                if svc:
+                    site = svc["SITENAME"]
+                    sites_per_vo[sla_vo].append(site)
+        return sites_per_vo
+
+    def get_sites_slas(self, cert_file, vo_map):
+        groups = self.get_sla_groups(cert_file)
+        self.sla_vos = self.flatten_vo_map(vo_map)
 
         sites = {}
         for group in groups:
