@@ -214,21 +214,21 @@ GOCDB, AppDB, and the Accounting Portal, and reports any deviations.
 
 ### Running the monitor
 
-Without optional arguments, the monitor will show information about the SLA
-per site:
+Without optional arguments the command will show information about the SLA
+across all sites:
 
 ```shell
 fedcloud-sla-monitor --user-cert /path/to/x509.pem
 ```
 
-The monitoring can be restricted to a specific site as follows:
+The monitoring can be restricted to a specific site as well:
 
 ```shell
 fedcloud-sla-monitor --site SITE-NAME --user-cert /path/to/x509.pem
 ```
 
-Additionally, rather than per site it is also possible to show SLA information
-per Virtual Organization:
+Additionally, it is also possible to show SLA information
+per Virtual Organization instead:
 
 ```shell
 fedcloud-sla-monitor --vo vo.name.eu --user-cert /path/to/x509.pem
