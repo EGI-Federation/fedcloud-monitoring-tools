@@ -61,7 +61,7 @@ class AppDB:
         return [i["VO"] for i in data]
 
     def all_vos(self):
-        r = requests.get(restful_url + "vos/")
+        r = requests.get(self.restful_url + "vos/")
         r.raise_for_status()
         result = []
         for vo in xmltodict.parse(r.text)["appdb:appdb"]["vo:vo"]:

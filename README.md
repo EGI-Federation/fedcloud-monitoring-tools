@@ -218,20 +218,20 @@ Without optional arguments, the monitor will show information about the SLA
 per site:
 
 ```shell
-$ fedcloud-sla-monitor --user-cert /path/to/x509.pem
+fedcloud-sla-monitor --user-cert /path/to/x509.pem
 ```
 
 The monitoring can be restricted to a specific site as follows:
 
 ```shell
-$ fedcloud-sla-monitor --site SITE-NAME --user-cert /path/to/x509.pem
+fedcloud-sla-monitor --site SITE-NAME --user-cert /path/to/x509.pem
 ```
 
 Additionally, rather than per site it is also possible to show SLA information
 per Virtual Organization:
 
 ```shell
-$ fedcloud-sla-monitor --vo vo.name.eu --user-cert /path/to/x509.pem
+fedcloud-sla-monitor --vo vo.name.eu --user-cert /path/to/x509.pem
 ```
 
 ## Useful links
