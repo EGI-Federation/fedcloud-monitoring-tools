@@ -4,7 +4,6 @@ import requests
 
 
 class OpsPortal:
-
     def __init__(self):
         self.vo_list = []
 
