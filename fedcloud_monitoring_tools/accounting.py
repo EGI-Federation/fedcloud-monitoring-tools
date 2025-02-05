@@ -63,22 +63,24 @@ class Accounting:
             self._get_accounting_data()
         for col in self._data:
             if col["id"] == "ylegend":
-                return [vo for vo in col.values() if vo != 'ylegend' and vo != 'id']
+                return [vo for vo in col.values() if vo != "ylegend" and vo != "id"]
 
     def accounting_all_vos(self):
         active_VOs = {}
         for vo in self.all_vos():
             active_VOs[vo] = {}
             for i in self._data:
-                if i["id"] != 'Total' and \
-                   i["id"] != 'Percent' and \
-                   i["id"] != 'var' and \
-                   i["id"] != 'xlegend' and \
-                   i["id"] != 'ylegend' and \
-                   vo in i and \
-                   i[vo] is not None and \
-                   float(i[vo]) > 0.0:
-                   # loop over all sites having > 0 CPUh for this VO
+                if (
+                    i["id"] != "Total"
+                    and i["id"] != "Percent"
+                    and i["id"] != "var"
+                    and i["id"] != "xlegend"
+                    and i["id"] != "ylegend"
+                    and vo in i
+                    and i[vo] is not None
+                    and float(i[vo]) > 0.0
+                ):
+                    # loop over all sites having > 0 CPUh for this VO
                     site = i["id"]
                     cpuh = float(i[vo])
                     active_VOs[vo][site] = cpuh

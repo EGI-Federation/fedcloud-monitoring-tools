@@ -52,6 +52,7 @@ def check_site_slas(site, acct, appdb, goc, gocdb_sites):
         click.echo(f"[W] {site} has no configuration for ops")
     click.echo()
 
+
 def vo_in_map(vo, vo_map):
     flat_list = []
     for i in vo_map.values():
@@ -59,41 +60,47 @@ def vo_in_map(vo, vo_map):
             flat_list += i
     return vo in flat_list
 
+
 def check_vo_sla(acct, appdb, goc, user_cert, vo_map, vo):
     if not vo_in_map(vo, vo_map):
-        click.secho("[ERR] VO {} not found in the map file provided".format(vo),
-                    fg="red", bold=True
-                   )
+        click.secho(
+            "[ERR] VO {} not found in the map file provided".format(vo),
+            fg="red",
+            bold=True,
+        )
         return
-    all_vos_acct  = acct.accounting_all_vos()
+    all_vos_acct = acct.accounting_all_vos()
     if vo not in all_vos_acct:
-        click.secho("[ERR] VO {} not found in Accounting Portal".format(vo),
-                    fg="red", bold=True
-                   )
+        click.secho(
+            "[ERR] VO {} not found in Accounting Portal".format(vo), fg="red", bold=True
+        )
         return
     all_vos_gocdb = goc.get_sites_vo(user_cert, vo_map)
     if vo not in all_vos_gocdb:
-        click.secho("[ERR] VO {} not found in GOCDB".format(vo),
-                    fg="red", bold=True
-                   )
+        click.secho("[ERR] VO {} not found in GOCDB".format(vo), fg="red", bold=True)
         return
     sites_gocdb = sorted(all_vos_gocdb[vo])
-    sites_acct  = sorted([provider for provider in all_vos_acct[vo]])
+    sites_acct = sorted([provider for provider in all_vos_acct[vo]])
     sites_appdb = sorted(appdb.get_sites_for_vo(vo))
     if sites_gocdb == sites_appdb == sites_acct:
-        click.secho("[OK] VO {}. The sites supporting the VO are: {}".format(vo, sites_gocdb),
-                    fg="green", bold=True
-                   )
-    elif 'sla-group-with-multiple-vos' in sites_gocdb and \
-         sites_appdb == sites_acct:
-        click.secho("[OK] VO {}. The sites supporting the VO are: {}".format(vo, sites_appdb),
-                    fg="green", bold=True
-                   )
+        click.secho(
+            "[OK] VO {}. The sites supporting the VO are: {}".format(vo, sites_gocdb),
+            fg="green",
+            bold=True,
+        )
+    elif "sla-group-with-multiple-vos" in sites_gocdb and sites_appdb == sites_acct:
+        click.secho(
+            "[OK] VO {}. The sites supporting the VO are: {}".format(vo, sites_appdb),
+            fg="green",
+            bold=True,
+        )
 
     else:
-        click.secho("[W] VO {}. Uncertain list of sites supporting the VO!".format(vo),
-                    fg="yellow", bold=True
-                   )
+        click.secho(
+            "[W] VO {}. Uncertain list of sites supporting the VO!".format(vo),
+            fg="yellow",
+            bold=True,
+        )
         click.echo("Sites in GOCDB: {}".format(sites_gocdb))
         click.echo("Sites in AppDB: {}".format(sites_appdb))
         click.echo("Sites in Accounting Portal: {}".format(sites_acct))

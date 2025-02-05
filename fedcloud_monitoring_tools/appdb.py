@@ -64,6 +64,6 @@ class AppDB:
         r = requests.get(restful_url + "vos/")
         r.raise_for_status()
         result = []
-        for vo in xmltodict.parse(r.text)['appdb:appdb']['vo:vo']:
-            result.append(vo['@name'])
+        for vo in xmltodict.parse(r.text)["appdb:appdb"]["vo:vo"]:
+            result.append(vo["@name"])
         return result

@@ -48,7 +48,7 @@ class GOCDB:
                 # All nova endpoints in the service group do not support all VOs.
                 # Therefore, a special value is added to be treated accordingly.
                 for vo in vos:
-                    sites_per_vo[vo] = ['sla-group-with-multiple-vos']
+                    sites_per_vo[vo] = ["sla-group-with-multiple-vos"]
                 continue
             elif vos is None:
                 # This SLA service group does not have a VO associated, skipping
