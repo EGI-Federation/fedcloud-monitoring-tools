@@ -205,9 +205,8 @@ Getting VMs information  [####################################]  100%
 
 ## fedcloud-sla-monitor
 
-`fedcloud-sla-monitor` checks the configuration of sites supporting SLAs. It
-compares the reported usage in the accounting portal and the information
-retrieved from the cloud-info-provider and reports any deviations.
+`fedcloud-sla-monitor` checks the configuration of sites supporting SLAs across
+GOCDB, AppDB, and the Accounting Portal, and reports any deviations.
 
 ### Requirements
 
@@ -215,15 +214,24 @@ retrieved from the cloud-info-provider and reports any deviations.
 
 ### Running the monitor
 
-```shell
-$ fedcloud-sla-monitor --help
-Usage: fedcloud-sla-monitor [OPTIONS]
+Without optional arguments the command will show information about the SLA
+across all sites:
 
-Options:
-  --site TEXT         Site to check
-  --user-cert TEXT    User certificate (for GOCDB queries)  [required]
-  --vo-map-file TEXT  SLA-VO mapping file
-  --help              Show this message and exit.
+```shell
+fedcloud-sla-monitor --user-cert /path/to/x509.pem
+```
+
+The monitoring can be restricted to a specific site as well:
+
+```shell
+fedcloud-sla-monitor --site SITE-NAME --user-cert /path/to/x509.pem
+```
+
+Additionally, it is also possible to show SLA information
+per Virtual Organization instead:
+
+```shell
+fedcloud-sla-monitor --vo vo.name.eu --user-cert /path/to/x509.pem
 ```
 
 ## Useful links

@@ -1,6 +1,7 @@
 """AppDB queries"""
 
 import requests
+import xmltodict
 
 sites_supporting_vo_query = """
 {
@@ -27,6 +28,7 @@ vos_in_site_query = """
 
 class AppDB:
     graphql_url = "https://is.appdb.egi.eu/graphql"
+    restful_url = "https://appdb-pi.egi.eu/rest/1.0/"
 
     def __init__(self):
         self.sites = {}
@@ -57,3 +59,11 @@ class AppDB:
         else:
             return []
         return [i["VO"] for i in data]
+
+    def all_vos(self):
+        r = requests.get(self.restful_url + "vos/")
+        r.raise_for_status()
+        result = []
+        for vo in xmltodict.parse(r.text)["appdb:appdb"]["vo:vo"]:
+            result.append(vo["@name"])
+        return result

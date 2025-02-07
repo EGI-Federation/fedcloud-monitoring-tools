@@ -64,7 +64,7 @@ OPERAS:
   - vo.operas-eu.org
 DEEP:
   - deep-hybrid-datacloud.eu
-POLICYCLOUD:
+AI4PUBLICPOLICY:
   - vo.ai4publicpolicy.eu
 CSCALE:
   - aquamonitor.c-scale.eu
@@ -136,11 +136,11 @@ OIPUB:
   - vo.oipub.com
 DECIDO:
   - vo.decido-project.eu
-AI4PUBLICPOLICY:
-  - vo.ai4publicpolicy.eu
 PSMA:
   - vo.radiotracers4psma.eu
 EUREKA3D:
   - culturalheritage.vo.egi.eu
 NEURODESK:
   - vo.neurodesk.eu
+EUROARGO:
+  - vo.euro-argo.eu
