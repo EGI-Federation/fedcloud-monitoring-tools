@@ -97,7 +97,10 @@ def check_vo_sla(acct, appdb, goc, ops_portal, user_cert, vo_map, vo):
             fg="green",
             bold=True,
         )
-    elif "sla-group-with-multiple-vos" in sites_gocdb and sites_appdb == sites_acct == sites_fedcloudclient:
+    elif (
+        "sla-group-with-multiple-vos" in sites_gocdb
+        and sites_appdb == sites_acct == sites_fedcloudclient
+    ):
         click.secho(
             "[OK] VO {}. The sites supporting the VO are: {}".format(vo, sites_appdb),
             fg="green",
