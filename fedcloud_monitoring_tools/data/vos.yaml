@@ -52,8 +52,6 @@ VESPA:
   - vo.europlanet-vespa.eu
 ECRIN:
   - vo.crmdr.org
-STARS4ALL:
-  - vo.stars4all.eu
 GOSAFE:
   - gosafe.eng.it
 DIGITBRAIN:
@@ -74,7 +72,6 @@ CSCALE:
   # these below are actually removed
   - HighResLandSurf.c-scale.eu
   - return.c-scale.eu
-  - hisea.c-scale.eu
   - coastmonitor.c-scale.eu
   - in-sar-cubes.c-scale.eu
   - plankton.c-scale.eu
@@ -86,8 +83,6 @@ EISCAT3D:
   - eiscat.se
 BINARE:
   - vo.binare-oy.eu
-COS4CLOUD:
-  - cos4cloud-eosc.eu
 PEROVSKITE:
   - perla-pv.ro
 ENES:
@@ -100,14 +95,10 @@ PITHIANRF:
   - vo.esc.pithia.eu
   - vo.pithia.eu
 CEITEC: []
-PLOCAN:
-  - vo.plocan.eu
 ENVRIFAIR:
   - vo.envri-fair.eu
 ICECUBE:
   - icecube
-MATRYCS:
-  - vo.matrycs.eu
 OPENCOASTS:
   - opencoast.eosc-hub.eu
 AIIDALAB:
