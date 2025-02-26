@@ -1,31 +1,39 @@
-# fedcloud-vm-monitoring
+# fedcloud-monitoring-tools
 
-This repository contains a Python tool to monitor usage of EGI FedCloud
-providers and remove long-running instances. The clients work with OpenStack
-cloud providers supporting the OIDC protocol.
+This repository contains a set of Python tools to monitor usage of EGI FedCloud
+providers. The clients work with OpenStack cloud providers supporting the OIDC
+protocol.
 
 ## Requirements
 
 - Python v3.9+
-- A Check-in account member of the VOs to be monitored
-- For getting the EGI user identity, cloud providers have to enable the
-  `"identity:get_user"` API call for the user (see
-  [VO auditing](https://docs.egi.eu/providers/cloud-compute/openstack/aai/#vo-auditing)
-  for more information)
 
 ## Installation
 
 You can install with `pip` (it is recommended to install in a virtualenv!):
 
 ```shell
-pip install -U git+https://github.com/EGI-Federation/fedcloud-vm-monitoring.git
+pip install -U git+https://github.com/EGI-Federation/fedcloud-monitoring-tools.git
 ```
 
 Some sites use certificates issued by certificate authorities that are not
 included in the default OS distribution, if you find SSL errors, please
 [install the EGI Core Trust Anchors certificates](https://fedcloudclient.fedcloud.eu/install.html#installing-egi-core-trust-anchor-certificates)
 
-## Running the monitor
+## fedcloud-vo-monitor
+
+`fedcloud-vo-monitor` checks the usage of a VO (e.g. running VMs, floating IPs
+allocated, security groups) and identifies potential issues in the running VMs.
+
+### Requirements
+
+- A Check-in account member of the VOs to be monitored
+- For getting the EGI user identity, cloud providers have to enable the
+  `"identity:get_user"` API call for the user (see
+  [VO auditing](https://docs.egi.eu/providers/cloud-compute/openstack/aai/#vo-auditing)
+  for more information)
+
+### Running the monitor
 
 For running the tool, you just need a
 [valid Check-in token](https://docs.egi.eu/users/aai/check-in/obtaining-tokens/),
@@ -47,8 +55,8 @@ You can tune the behavior with the following parameters:
 - `--show-quotas BOOLEAN`: whether to show quotas for the VO or not (default:
   `True`)
 - `--check-ssh BOOLEAN`: Check SSH version on target VMs (default: `False`)
-- `--check-cups BOOLEAN`: Check whether TCP/UDP port 631 is accessible
-  (default: `False`)
+- `--check-cups BOOLEAN`: Check whether TCP/UDP port 631 is accessible (default:
+  `False`)
 
 If you have access to
 [Check-in LDAP](https://docs.egi.eu/users/aai/check-in/vos/#ldap) for VO
@@ -60,8 +68,9 @@ membership, you can specify the settings with the following options:
 The `ldap-server`, `ldap-base-dn` and `ldap-search-filter`, can further tune the
 usage of LDAP, but should work for most cases without changes.
 
-### Sample output
+#### Sample output
 
+<!-- markdownlint-disable MD013 -->
 ```shell
 $ fedcloud-vo-monitor --vo cloud.egi.eu
 [.] Checking VO cloud.egi.eu at NCG-INGRID-PT
@@ -191,6 +200,38 @@ Getting VMs information  [####################################]  100%
     secgroup-rules = 100
 [-] WARNING: Less than 1 GB RAM per available CPU
 [-] WARNING: Less than 3 security groups per instance
+```
+<!-- markdownlint-enable MD013 -->
+
+## fedcloud-sla-monitor
+
+`fedcloud-sla-monitor` checks the configuration of sites supporting SLAs across
+GOCDB, AppDB, and the Accounting Portal, and reports any deviations.
+
+### Requirements
+
+- An IGTF certificate to query GOCDB SLA lists
+
+### Running the monitor
+
+Without optional arguments the command will show information about the SLA
+across all sites:
+
+```shell
+fedcloud-sla-monitor --user-cert /path/to/x509.pem
+```
+
+The monitoring can be restricted to a specific site as well:
+
+```shell
+fedcloud-sla-monitor --site SITE-NAME --user-cert /path/to/x509.pem
+```
+
+Additionally, it is also possible to show SLA information
+per Virtual Organization instead:
+
+```shell
+fedcloud-sla-monitor --vo vo.name.eu --user-cert /path/to/x509.pem
 ```
 
 ## Useful links

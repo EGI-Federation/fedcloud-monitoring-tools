@@ -1,8 +1,8 @@
 """Monitor VM instances running in the provider"""
 
 import click
-from fedcloud_vm_monitoring.appdb import AppDB
-from fedcloud_vm_monitoring.site_monitor import SiteMonitor, SiteMonitorException
+from fedcloud_monitoring_tools.appdb import AppDB
+from fedcloud_monitoring_tools.site_monitor import SiteMonitor, SiteMonitorException
 from fedcloudclient.decorators import oidc_params
 from fedcloudclient.sites import list_sites
 
@@ -93,8 +93,8 @@ def main(
                 "search_filter": ldap_search_filter,
             }
         )
-    appdb = AppDB(vo)
-    appdb_sites = appdb.get_sites_for_vo()
+    appdb = AppDB()
+    appdb_sites = appdb.get_sites_for_vo(vo)
     fedcloudclient_sites = list_sites(vo)
     sites = [site] if site else set(appdb_sites + fedcloudclient_sites)
     for s in sites:
