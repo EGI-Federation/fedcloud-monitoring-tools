@@ -8,6 +8,7 @@ from fedcloud_monitoring_tools.accounting import Accounting
 from fedcloud_monitoring_tools.appdb import AppDB
 from fedcloud_monitoring_tools.goc import GOCDB
 from fedcloud_monitoring_tools.operations_portal import OpsPortal
+from fedcloudclient.sites import list_sites
 
 
 def check_site_slas(site, acct, appdb, goc, gocdb_sites):
@@ -89,13 +90,14 @@ def check_vo_sla(acct, appdb, goc, ops_portal, user_cert, vo_map, vo):
     sites_gocdb = sorted(all_vos_gocdb[vo])
     sites_acct = sorted([provider for provider in all_vos_acct[vo]])
     sites_appdb = sorted(appdb.get_sites_for_vo(vo))
-    if sites_gocdb == sites_appdb == sites_acct:
+    sites_fedcloudclient = sorted(list_sites(vo))
+    if sites_gocdb == sites_appdb == sites_acct == sites_fedcloudclient:
         click.secho(
             "[OK] VO {}. The sites supporting the VO are: {}".format(vo, sites_gocdb),
             fg="green",
             bold=True,
         )
-    elif "sla-group-with-multiple-vos" in sites_gocdb and sites_appdb == sites_acct:
+    elif "sla-group-with-multiple-vos" in sites_gocdb and sites_appdb == sites_acct == sites_fedcloudclient:
         click.secho(
             "[OK] VO {}. The sites supporting the VO are: {}".format(vo, sites_appdb),
             fg="green",
@@ -111,6 +113,7 @@ def check_vo_sla(acct, appdb, goc, ops_portal, user_cert, vo_map, vo):
         click.echo("Sites in GOCDB: {}".format(sites_gocdb))
         click.echo("Sites in AppDB: {}".format(sites_appdb))
         click.echo("Sites in Accounting Portal: {}".format(sites_acct))
+        click.echo("Sites in fedcloudclient: {}".format(sites_fedcloudclient))
     click.echo("Accounting data per provider in the last {} days:".format(acct.days))
     for provider in all_vos_acct[vo]:
         click.echo("Site: {}, CPUh: {}".format(provider, all_vos_acct[vo][provider]))
