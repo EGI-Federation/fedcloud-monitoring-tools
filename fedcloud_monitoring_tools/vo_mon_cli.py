@@ -1,8 +1,8 @@
 """VO-level testing"""
 
 import click
-from fedcloud_vm_monitoring.appdb import AppDB
-from fedcloud_vm_monitoring.vo_mon import VOTest, VOTestException
+from fedcloud_monitoring_tools.appdb import AppDB
+from fedcloud_monitoring_tools.vo_mon import VOTest, VOTestException
 from fedcloudclient.decorators import oidc_params
 from fedcloudclient.sites import list_sites
 
