@@ -13,9 +13,11 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.12"
       - name: Install package
         run: pip install .
       - name: Try to run the command
         run: |
           fedcloud-vo-monitor --help
+          fedcloud-sla-monitor --help
+          fedcloud-vo-testing --help
