@@ -63,7 +63,7 @@ class VOTest:
                         mem_size: 4 GB
                     os:
                       properties:
-                        image: appdb://SITE/egi.ubuntu.22.04?VO
+                        image: appdb://SITE/egi.ubuntu.24.04?VO
               outputs:
                 node_ip:
                   value: { get_attribute: [ simple_node, public_address, 0 ] }
