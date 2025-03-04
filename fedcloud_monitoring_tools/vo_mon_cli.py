@@ -17,8 +17,8 @@ from fedcloudclient.sites import list_sites
 )
 def main(site, vo, access_token):
     # gather all sites in a given VO
-    appdb = AppDB(vo)
-    appdb_sites = appdb.get_sites_for_vo()
+    appdb = AppDB()
+    appdb_sites = appdb.get_sites_for_vo(vo)
     fedcloudclient_sites = list_sites(vo)
     sites = [site] if site else set(appdb_sites + fedcloudclient_sites)
     for s in sites:
