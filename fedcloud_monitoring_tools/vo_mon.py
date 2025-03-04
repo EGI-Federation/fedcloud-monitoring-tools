@@ -15,8 +15,11 @@ from ldap3.core.exceptions import LDAPException
 from paramiko import SSHException
 
 from imclient import IMClient
+from imclient.imclient import CmdSsh
 import time
 import os
+from fabric import Connection
+import io
 
 IM_REST_API = "https://im.egi.eu/im"
 AUTH_FILE = "auth.dat"
@@ -73,8 +76,9 @@ class VOTest:
         return inf_desc.replace("SITE", self.site).replace("VO", self.vo)
 
     def launch_test_vm(self):
-        self.create_auth_file(AUTH_FILE)
+        # deploy VM
         tosca_template = self.create_vm_tosca_template()
+        self.create_auth_file(AUTH_FILE)
         auth = IMClient.read_auth_data(AUTH_FILE)
         imclient = IMClient.init_client(IM_REST_API, auth)
         click.echo(f"[+] Creating test VM...")
@@ -82,17 +86,36 @@ class VOTest:
         if not success:
             raise VOTestException(inf_id)
         click.echo(f"[+] Test VM successfully created with ID {inf_id}")
+        # wait for VM to be ready
         state = "pending"
         while state != "configured":
-            click.echo(f"[+] Waiting for test VM to be ready...")
+            click.echo(f"[+] Waiting for test VM to be ready. Current state is: {state}")
             time.sleep(10)
             success, state = imclient.getvminfo(inf_id, 0, prop='state')
-        click.echo(f"[+] Waiting for test VM to be ready...")
+        click.echo(f"[+] Test VM is now: {state}. Waiting a few additional seconds.")
         time.sleep(30)
 #        click.echo(f"[+] Waiting for test VM to be ready...")
 #        success, info = imclient._wait()
 #        click.echo(f"[+] IM: {success}, {inf_id}")
-        # TODO: need to ssh into VM here
+        # run SSH command inside the VM
+        success, outputs = imclient.get_infra_property(inf_id, 'outputs')
+        if not success:
+            raise VOTestException(err)
+        ssh_host = outputs['node_ip']
+        ssh_user = outputs['node_creds']['user']
+        ssh_pkey = outputs['node_creds']['token']
+        # xref: https://stackoverflow.com/a/41862308
+        pkey_io = io.StringIO()
+        pkey_io.write(ssh_pkey)
+        pkey_io.seek(0)
+        ssh_rsa_key = paramiko.RSAKey.from_private_key(pkey_io)
+        c = Connection(host=ssh_host, user=ssh_user, connect_kwargs={"pkey": ssh_rsa_key})
+        result = c.run('hostname', hide=True)
+        if result.ok:
+            click.secho(f"[+] Command '{result.command}' sucessfully executed with output: {result.stdout}", fg="green", bold=True)
+        else:
+            click.secho(f"[-] Command '{result.command}' failed with output: {result.stderr}", fg="red", bold=True)
+        # clean up
         success, err = imclient.destroy(inf_id)
         if not success:
             raise VOTestException(err)
