@@ -24,7 +24,7 @@ def main(site, vo, access_token):
     for s in sites:
         click.secho(f"[.] Testing VO {vo} at {s}", fg="blue", bold=True)
         try:
-            vo_test = VOTest(vo, site, access_token)
+            vo_test = VOTest(vo, s, access_token)
             vo_test.launch_test_vm()
 
         except VOTestException as e:
