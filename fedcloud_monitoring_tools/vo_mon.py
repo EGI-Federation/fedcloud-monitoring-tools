@@ -23,6 +23,7 @@ import io
 
 IM_REST_API = "https://im.egi.eu/im"
 AUTH_FILE = "auth.dat"
+MAX_NUM_CHECKS = 10
 
 class VOTestException(Exception):
     pass
@@ -88,15 +89,20 @@ class VOTest:
         click.echo(f"[+] Test VM successfully created with ID {inf_id}")
         # wait for VM to be ready
         state = "pending"
-        while state != "configured":
-            click.echo(f"[+] Waiting for test VM to be ready. Current state is: {state}")
+        attempts = 1
+        while state != "configured" and attempts <= MAX_NUM_CHECKS:
+            click.echo(f"[+] Waiting for test VM to be ready. Current state is: {state}. Attempt: {attempts}/{MAX_NUM_CHECKS}")
             time.sleep(10)
             success, state = imclient.getvminfo(inf_id, 0, prop='state')
+            attempts += 1
+        # has the VM been configured?
+        if state != "configured":
+            click.secho(f"Test VM could not be configured after {attempts} attempts", fg="red", bold=True)
+            self.destroy_test_vm(inf_id)
+            return False
+
         click.echo(f"[+] Test VM is now: {state}. Waiting a few additional seconds.")
         time.sleep(30)
-#        click.echo(f"[+] Waiting for test VM to be ready...")
-#        success, info = imclient._wait()
-#        click.echo(f"[+] IM: {success}, {inf_id}")
         # run SSH command inside the VM
         success, outputs = imclient.get_infra_property(inf_id, 'outputs')
         if not success:
@@ -109,13 +115,25 @@ class VOTest:
         pkey_io.write(ssh_pkey)
         pkey_io.seek(0)
         ssh_rsa_key = paramiko.RSAKey.from_private_key(pkey_io)
-        c = Connection(host=ssh_host, user=ssh_user, connect_kwargs={"pkey": ssh_rsa_key})
-        result = c.run('hostname', hide=True)
-        if result.ok:
-            click.secho(f"[+] Command '{result.command}' sucessfully executed with output: {result.stdout}", fg="green", bold=True)
-        else:
-            click.secho(f"[-] Command '{result.command}' failed with output: {result.stderr}", fg="red", bold=True)
+        try:
+            c = Connection(host=ssh_host, user=ssh_user, connect_kwargs={"pkey": ssh_rsa_key})
+            result = c.run('hostname', hide=True)
+            if result.ok:
+                click.secho(f"[+] Command '{result.command}' sucessfully executed with output: {result.stdout}", fg="green", bold=True)
+            else:
+                click.secho(f"[-] Command '{result.command}' failed with output: {result.stderr}", fg="red", bold=True)
+        except Exception as e:
+            click.echo(" ".join([click.style("ERROR:", fg="red"), str(e)]), err=True)
+        finally:
+            # clean up
+            self.destroy_test_vm(inf_id)
+        return True
+
+    def destroy_test_vm(self, inf_id):
         # clean up
+        self.create_auth_file(AUTH_FILE)
+        auth = IMClient.read_auth_data(AUTH_FILE)
+        imclient = IMClient.init_client(IM_REST_API, auth)
         success, err = imclient.destroy(inf_id)
         if not success:
             raise VOTestException(err)
