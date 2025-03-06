@@ -101,7 +101,7 @@ class VOTest:
             self.destroy_test_vm(inf_id)
             return False
 
-        click.echo(f"[+] Test VM is now: {state}. Waiting a few additional seconds.")
+        click.echo(f"[+] Test VM is now {state}. Waiting a few additional seconds.")
         time.sleep(30)
         # run SSH command inside the VM
         success, outputs = imclient.get_infra_property(inf_id, 'outputs')
