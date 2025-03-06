@@ -97,12 +97,14 @@ class VOTest:
             attempts += 1
         # has the VM been configured?
         if state != "configured":
-            click.secho(f"Test VM could not be configured after {attempts} attempts", fg="red", bold=True)
+            click.secho(f"Test VM could not be configured after {attempts} attempts, reported state is: {state}", fg="red", bold=True)
+            success, state = imclient.getvminfo(inf_id, 0, prop='contmsg')
+            click.echo(f"Further information about the VM: {state}")
             self.destroy_test_vm(inf_id)
             return False
 
-        click.echo(f"[+] Test VM is now {state}. Waiting a few additional seconds.")
-        time.sleep(30)
+        click.echo(f"[+] Test VM is now {state}. Waiting for 1 additional minute before testing the VM.")
+        time.sleep(60)
         # run SSH command inside the VM
         success, outputs = imclient.get_infra_property(inf_id, 'outputs')
         if not success:
@@ -124,6 +126,8 @@ class VOTest:
                 click.secho(f"[-] Command '{result.command}' failed with output: {result.stderr}", fg="red", bold=True)
         except Exception as e:
             click.echo(" ".join([click.style("ERROR:", fg="red"), str(e)]), err=True)
+            success, state = imclient.getvminfo(inf_id, 0, prop='contmsg')
+            click.echo(f"Further information about the VM: {state}")
         finally:
             # clean up
             self.destroy_test_vm(inf_id)
