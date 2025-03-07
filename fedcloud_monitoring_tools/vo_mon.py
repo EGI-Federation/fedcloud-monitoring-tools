@@ -46,10 +46,8 @@ class VOTest:
     def create_vm_tosca_template(self):
         inf_desc = """
             tosca_definitions_version: tosca_simple_yaml_1_0
-            
             imports:
             - grycap_custom_types: https://raw.githubusercontent.com/grycap/tosca/main/custom_types.yaml
-            
             topology_template:
               node_templates:
                 simple_node:
