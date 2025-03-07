@@ -32,7 +32,7 @@ class VOTest:
         with open(filepath, "w") as output_file:
             output_file.write(
                 "id = im; type = InfrastructureManager; token = {}\n".format(self.token)
-                )
+            )
             output_file.write(
                 "id = egi; type = EGI; host = {}; vo = {}; token = {}\n".format(
                     self.site, self.vo, self.token
