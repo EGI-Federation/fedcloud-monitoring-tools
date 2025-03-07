@@ -6,6 +6,7 @@ from fedcloud_monitoring_tools.vo_mon import VOTest, VOTestException
 from fedcloudclient.decorators import oidc_params
 from fedcloudclient.sites import list_sites
 
+
 @click.command()
 @oidc_params
 @click.option("--site", help="Restrict the testing to the site provided")

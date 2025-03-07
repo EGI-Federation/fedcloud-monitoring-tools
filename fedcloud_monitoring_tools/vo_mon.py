@@ -1,21 +1,11 @@
 """VO-level testing for a given site in a VO"""
 
-import ipaddress
-import subprocess
-from collections import defaultdict
 from datetime import datetime, timezone
 
 import click
-import ldap3
 import paramiko
-from dateutil.parser import parse
-from fedcloudclient.openstack import fedcloud_openstack
-from fedcloudclient.sites import find_endpoint_and_project_id
-from ldap3.core.exceptions import LDAPException
-from paramiko import SSHException
 
 from imclient import IMClient
-from imclient.imclient import CmdSsh
 import time
 import os
 from fabric import Connection
@@ -24,6 +14,7 @@ import io
 IM_REST_API = "https://im.egi.eu/im"
 AUTH_FILE = "auth.dat"
 MAX_NUM_CHECKS = 10
+
 
 class VOTestException(Exception):
     pass
@@ -40,11 +31,18 @@ class VOTest:
 
     def create_auth_file(self, filepath):
         with open(filepath, "w") as output_file:
-            output_file.write("id = im; type = InfrastructureManager; token = \"{}\"\n".format(self.token))
-            output_file.write("id = egi; type = EGI; host = {}; vo = {}; token = \"{}\"\n".format(self.site, self.vo, self.token))
+            output_file.write(
+                'id = im; type = InfrastructureManager; token = {}\n'.format(
+                    self.token)
+                )
+            output_file.write(
+                'id = egi; type = EGI; host = {}; vo = {}; token = {}\n'.format(
+                    self.site, self.vo, self.token)
+            )
 
     def delete_auth_file(self, filepath):
-        if os.path.exists(filepath): os.remove(filepath)
+        if os.path.exists(filepath):
+            os.remove(filepath)
 
     def create_vm_tosca_template(self):
         inf_desc = """
@@ -91,42 +89,60 @@ class VOTest:
         state = "pending"
         attempts = 1
         while state != "configured" and attempts <= MAX_NUM_CHECKS:
-            click.echo(f"[+] Waiting for test VM to be ready. Current state is: {state}. Attempt: {attempts}/{MAX_NUM_CHECKS}")
+            click.echo(
+                f"[+] Waiting for test VM to be ready. Current state is: {state}. Attempt: {attempts}/{MAX_NUM_CHECKS}"
+            )
             time.sleep(10)
-            success, state = imclient.getvminfo(inf_id, 0, prop='state')
+            success, state = imclient.getvminfo(inf_id, 0, prop="state")
             attempts += 1
         # has the VM been configured?
         if state != "configured":
-            click.secho(f"Test VM could not be configured after {attempts} attempts, reported state is: {state}", fg="red", bold=True)
-            success, state = imclient.getvminfo(inf_id, 0, prop='contmsg')
+            click.secho(
+                f"Test VM could not be configured after {attempts} attempts, reported state is: {state}",
+                fg="red",
+                bold=True,
+            )
+            success, state = imclient.getvminfo(inf_id, 0, prop="contmsg")
             click.echo(f"Further information about the VM: {state}")
             self.destroy_test_vm(inf_id)
             return False
 
-        click.echo(f"[+] Test VM is now {state}. Waiting for 1 additional minute before testing the VM.")
+        click.echo(
+            f"[+] Test VM is now {state}. Waiting for 1 additional minute before testing the VM."
+        )
         time.sleep(60)
         # run SSH command inside the VM
-        success, outputs = imclient.get_infra_property(inf_id, 'outputs')
+        success, outputs = imclient.get_infra_property(inf_id, "outputs")
         if not success:
             raise VOTestException(f"{success} {outputs}")
-        ssh_host = outputs['node_ip']
-        ssh_user = outputs['node_creds']['user']
-        ssh_pkey = outputs['node_creds']['token']
+        ssh_host = outputs["node_ip"]
+        ssh_user = outputs["node_creds"]["user"]
+        ssh_pkey = outputs["node_creds"]["token"]
         # xref: https://stackoverflow.com/a/41862308
         pkey_io = io.StringIO()
         pkey_io.write(ssh_pkey)
         pkey_io.seek(0)
         ssh_rsa_key = paramiko.RSAKey.from_private_key(pkey_io)
         try:
-            c = Connection(host=ssh_host, user=ssh_user, connect_kwargs={"pkey": ssh_rsa_key})
+            c = Connection(
+                host=ssh_host, user=ssh_user, connect_kwargs={"pkey": ssh_rsa_key}
+            )
             result = c.run(ssh_command, hide=True)
             if result.ok:
-                click.secho(f"[+] Command '{result.command}' sucessfully executed with output: {result.stdout}", fg="green", bold=True)
+                click.secho(
+                    f"[+] Command '{result.command}' sucessfully executed with output: {result.stdout}",
+                    fg="green",
+                    bold=True,
+                )
             else:
-                click.secho(f"[-] Command '{result.command}' failed with output: {result.stderr}", fg="red", bold=True)
+                click.secho(
+                    f"[-] Command '{result.command}' failed with output: {result.stderr}",
+                    fg="red",
+                    bold=True,
+                )
         except Exception as e:
             click.echo(" ".join([click.style("ERROR:", fg="red"), str(e)]), err=True)
-            success, state = imclient.getvminfo(inf_id, 0, prop='contmsg')
+            success, state = imclient.getvminfo(inf_id, 0, prop="contmsg")
             click.echo(f"Further information about the VM: {state}")
         finally:
             # clean up

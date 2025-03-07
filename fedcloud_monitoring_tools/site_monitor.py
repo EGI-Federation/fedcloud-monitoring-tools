@@ -473,7 +473,10 @@ class SiteMonitor:
             else:
                 click.echo(
                     "    {:<14} = Limit: {:>3}, Used: {:>3} ({}%)".format(
-                        k, v["Limit"], v["In Use"], round(v["In Use"] / v["Limit"] * 100)
+                        k,
+                        v["Limit"],
+                        v["In Use"],
+                        round(v["In Use"] / v["Limit"] * 100),
                     )
                 )
         # checks on quota
