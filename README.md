@@ -270,7 +270,6 @@ Run a specific command on the test VM:
 fedcloud-vo-testing --vo vo.access.egi.eu --ssh-command "lscpu"
 ```
 
-
 ## Useful links
 
 - [OpenStack API](https://docs.openstack.org/api-ref/)

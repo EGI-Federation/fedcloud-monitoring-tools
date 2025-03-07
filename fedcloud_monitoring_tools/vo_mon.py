@@ -32,11 +32,11 @@ class VOTest:
     def create_auth_file(self, filepath):
         with open(filepath, "w") as output_file:
             output_file.write(
-                'id = im; type = InfrastructureManager; token = {}\n'.format(
+                "id = im; type = InfrastructureManager; token = {}\n".format(
                     self.token)
                 )
             output_file.write(
-                'id = egi; type = EGI; host = {}; vo = {}; token = {}\n'.format(
+                "id = egi; type = EGI; host = {}; vo = {}; token = {}\n".format(
                     self.site, self.vo, self.token)
             )
 
@@ -80,7 +80,7 @@ class VOTest:
         self.create_auth_file(AUTH_FILE)
         auth = IMClient.read_auth_data(AUTH_FILE)
         imclient = IMClient.init_client(IM_REST_API, auth)
-        click.echo(f"[+] Creating test VM...")
+        click.echo("[+] Creating test VM...")
         success, inf_id = imclient.create(tosca_template, desc_type="yaml")
         if not success:
             raise VOTestException(inf_id)
