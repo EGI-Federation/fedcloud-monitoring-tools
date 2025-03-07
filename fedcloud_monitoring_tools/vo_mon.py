@@ -76,7 +76,7 @@ class VOTest:
         """
         return inf_desc.replace("SITE", self.site).replace("VO", self.vo)
 
-    def launch_test_vm(self):
+    def launch_test_vm(self, ssh_command):
         # deploy VM
         tosca_template = self.create_vm_tosca_template()
         self.create_auth_file(AUTH_FILE)
@@ -108,7 +108,7 @@ class VOTest:
         # run SSH command inside the VM
         success, outputs = imclient.get_infra_property(inf_id, 'outputs')
         if not success:
-            raise VOTestException(err)
+            raise VOTestException(f"{success} {outputs}")
         ssh_host = outputs['node_ip']
         ssh_user = outputs['node_creds']['user']
         ssh_pkey = outputs['node_creds']['token']
@@ -119,7 +119,7 @@ class VOTest:
         ssh_rsa_key = paramiko.RSAKey.from_private_key(pkey_io)
         try:
             c = Connection(host=ssh_host, user=ssh_user, connect_kwargs={"pkey": ssh_rsa_key})
-            result = c.run('hostname', hide=True)
+            result = c.run(ssh_command, hide=True)
             if result.ok:
                 click.secho(f"[+] Command '{result.command}' sucessfully executed with output: {result.stdout}", fg="green", bold=True)
             else:
@@ -134,7 +134,6 @@ class VOTest:
         return True
 
     def destroy_test_vm(self, inf_id):
-        # clean up
         self.create_auth_file(AUTH_FILE)
         auth = IMClient.read_auth_data(AUTH_FILE)
         imclient = IMClient.init_client(IM_REST_API, auth)
