@@ -1,15 +1,14 @@
 """VO-level testing for a given site in a VO"""
 
+import io
+import os
+import time
 from datetime import datetime, timezone
 
 import click
 import paramiko
-
-from imclient import IMClient
-import time
-import os
 from fabric import Connection
-import io
+from imclient import IMClient
 
 IM_REST_API = "https://im.egi.eu/im"
 AUTH_FILE = "auth.dat"
