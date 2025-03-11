@@ -13,16 +13,18 @@ include = [
 [tool.poetry.scripts]
 fedcloud-vo-monitor = "fedcloud_monitoring_tools.vm_monitor_cli:main"
 fedcloud-sla-monitor = "fedcloud_monitoring_tools.sla_monitor_cli:main"
-
+fedcloud-vo-testing = "fedcloud_monitoring_tools.vo_mon_cli:main"
 
 [tool.poetry.dependencies]
-python = "^3.9"
-fedcloudclient = "^1.4.3"
+python = "^3.12"
+fedcloudclient = "^1.4.4"
 ldap3 = "^2.9.1"
 python-dateutil = "^2.9.0.post0"
 paramiko = "^3.4.0"
+IM-client = "^1.8.1"
 httpx = "^0.27.2"
 xmltodict = "^0.14.2"
+fabric = "^3.2.2"
 
 [build-system]
 requires = ["poetry-core"]

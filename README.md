@@ -234,6 +234,42 @@ per Virtual Organization instead:
 fedcloud-sla-monitor --vo vo.name.eu --user-cert /path/to/x509.pem
 ```
 
+## fedcloud-vo-testing
+
+`fedcloud-vo-testing` creates a test Virtual Machine using
+[IM-client](https://github.com/grycap/im-client) on a given
+VO and site. The goal is to quickly test whether an
+OpenStack tenant is correctly configured to deploy VMs
+using [Infrastructure Manager](https://im.egi.eu/).
+
+### Requirements
+
+- A Check-in account member of the VOs to be monitored.
+- For running the tool, you just need a
+[valid Check-in token](https://docs.egi.eu/users/aai/check-in/obtaining-tokens/),
+the tool leverages
+[FedCloudClient Authentication](https://fedcloudclient.fedcloud.eu/usage.html#authentication).
+
+### Running the monitor
+
+Create a test VM on a given VO and site:
+
+```shell
+fedcloud-vo-testing --vo vo.access.egi.eu --site SCAI
+```
+
+Create a test VM on all sites supporting a VO:
+
+```shell
+fedcloud-vo-testing --vo vo.access.egi.eu
+```
+
+Run a specific command on the test VM:
+
+```shell
+fedcloud-vo-testing --vo vo.access.egi.eu --ssh-command "lscpu"
+```
+
 ## Useful links
 
 - [OpenStack API](https://docs.openstack.org/api-ref/)

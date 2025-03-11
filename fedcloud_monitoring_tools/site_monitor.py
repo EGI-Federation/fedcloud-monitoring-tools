@@ -464,11 +464,21 @@ class SiteMonitor:
                         "Limit": r["Limit"],
                     }
         for k, v in quota_info.items():
-            click.echo(
-                "    {:<14} = Limit: {:>3}, Used: {:>3} ({}%)".format(
-                    k, v["Limit"], v["In Use"], round(v["In Use"] / v["Limit"] * 100)
+            if v["Limit"] == 0:
+                click.echo(
+                    "    {:<14} = Limit: {:>3}, Used: {:>3} ({}%)".format(
+                        k, v["Limit"], v["In Use"], 0
+                    )
                 )
-            )
+            else:
+                click.echo(
+                    "    {:<14} = Limit: {:>3}, Used: {:>3} ({}%)".format(
+                        k,
+                        v["Limit"],
+                        v["In Use"],
+                        round(v["In Use"] / v["Limit"] * 100),
+                    )
+                )
         # checks on quota
         if (
             quota_info.get("ram (GB)").get("Limit", 1)
