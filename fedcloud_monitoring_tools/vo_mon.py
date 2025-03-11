@@ -109,9 +109,7 @@ class VOTest:
         )
         time.sleep(60)
         # run SSH command inside the VM
-        success, outputs = imclient.get_infra_property(inf_id, "outputs")
-        if not success:
-            raise VOTestException(f"{success} {outputs}")
+        _, outputs = imclient.get_infra_property(inf_id, "outputs")
         ssh_host = outputs["node_ip"]
         ssh_user = outputs["node_creds"]["user"]
         ssh_pkey = outputs["node_creds"]["token"]
