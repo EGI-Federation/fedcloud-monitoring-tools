@@ -85,9 +85,9 @@ class VOTest:
         # wait for VM to be ready
         state = "pending"
         attempts = 1
-        while state != "configured" and attempts <= MAX_NUM_CHECKS:
+        while state == "pending" and attempts <= MAX_NUM_CHECKS:
             click.echo(
-                f"[+] Waiting for test VM to be ready. Current state is: {state}. Attempt: {attempts}/{MAX_NUM_CHECKS}"
+                f"[+] Waiting for test VM to be ready. Attempt: {attempts}/{MAX_NUM_CHECKS}"
             )
             time.sleep(10)
             success, state = imclient.getvminfo(inf_id, 0, prop="state")
