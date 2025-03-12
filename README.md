@@ -20,9 +20,9 @@ Some sites use certificates issued by certificate authorities that are not
 included in the default OS distribution, if you find SSL errors, please
 [install the EGI Core Trust Anchors certificates](https://fedcloudclient.fedcloud.eu/install.html#installing-egi-core-trust-anchor-certificates)
 
-## fedcloud-vo-monitor
+## fedcloud-vm-monitor
 
-`fedcloud-vo-monitor` checks the usage of a VO (e.g. running VMs, floating IPs
+`fedcloud-vm-monitor` checks the usage of a VO (e.g. running VMs, floating IPs
 allocated, security groups) and identifies potential issues in the running VMs.
 
 ### Requirements
@@ -41,7 +41,7 @@ the tool leverages
 [FedCloudClient Authentication](https://fedcloudclient.fedcloud.eu/usage.html#authentication):
 
 ```shell
-fedcloud-vo-monitor
+fedcloud-vm-monitor
 ```
 
 You can tune the behavior with the following parameters:
@@ -72,7 +72,7 @@ usage of LDAP, but should work for most cases without changes.
 
 <!-- markdownlint-disable MD013 -->
 ```shell
-$ fedcloud-vo-monitor --vo cloud.egi.eu
+$ fedcloud-vm-monitor --vo cloud.egi.eu
 [.] Checking VO cloud.egi.eu at NCG-INGRID-PT
 [+] Total VM instance(s) running in the resource provider = 3
 Getting VMs information  [####################################]  100%

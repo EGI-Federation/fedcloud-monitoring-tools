@@ -2,7 +2,7 @@
 
 import click
 from fedcloud_monitoring_tools.appdb import AppDB
-from fedcloud_monitoring_tools.vo_mon import VOTest, VOTestException
+from fedcloud_monitoring_tools.vo_test import VOTest, VOTestException
 from fedcloudclient.decorators import oidc_params
 from fedcloudclient.sites import list_sites
 

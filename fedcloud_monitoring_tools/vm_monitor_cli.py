@@ -2,7 +2,7 @@
 
 import click
 from fedcloud_monitoring_tools.appdb import AppDB
-from fedcloud_monitoring_tools.site_monitor import SiteMonitor, SiteMonitorException
+from fedcloud_monitoring_tools.vm_monitor import VmMonitor, VmMonitorException
 from fedcloudclient.decorators import oidc_params
 from fedcloudclient.sites import list_sites
 
@@ -99,16 +99,16 @@ def main(
     sites = [site] if site else set(appdb_sites + fedcloudclient_sites)
     for s in sites:
         click.secho(f"[.] Checking VO {vo} at {s}", fg="blue", bold=True)
-        site_monitor = SiteMonitor(
+        vm_monitor = VmMonitor(
             s, vo, access_token, max_days, check_ssh, check_cups, ldap_config
         )
         try:
-            site_monitor.vm_monitor(delete)
+            vm_monitor.vm_monitor(delete)
             if show_quotas:
                 click.echo("[+] Quota information:")
-                site_monitor.show_quotas()
-            site_monitor.check_unused_floating_ips()
-            site_monitor.check_unused_security_groups()
-            site_monitor.check_unused_volumes()
-        except SiteMonitorException as e:
+                vm_monitor.show_quotas()
+            vm_monitor.check_unused_floating_ips()
+            vm_monitor.check_unused_security_groups()
+            vm_monitor.check_unused_volumes()
+        except VmMonitorException as e:
             click.echo(" ".join([click.style("ERROR:", fg="red"), str(e)]), err=True)
