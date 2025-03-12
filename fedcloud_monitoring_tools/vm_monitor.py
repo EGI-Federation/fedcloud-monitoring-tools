@@ -15,11 +15,11 @@ from ldap3.core.exceptions import LDAPException
 from paramiko import SSHException
 
 
-class SiteMonitorException(Exception):
+class VmMonitorException(Exception):
     pass
 
 
-class SiteMonitor:
+class VmMonitor:
     """Helper class to call fedcloudclient easily"""
 
     color_maps = defaultdict(lambda: "red", ACTIVE="green", BUILD="yellow")
@@ -51,7 +51,7 @@ class SiteMonitor:
         )
         if error_code != 0:
             if do_raise:
-                raise SiteMonitorException(result)
+                raise VmMonitorException(result)
             else:
                 click.echo(" ".join([click.style("WARNING:", fg="yellow"), result]))
                 return {}
@@ -63,7 +63,7 @@ class SiteMonitor:
             try:
                 command = ("user", "list")
                 all_users = self._run_command(command)
-            except SiteMonitorException:
+            except VmMonitorException:
                 try:
                     # trick fedcloudclient to give us what we need
                     command = ("token", "issue")
@@ -73,7 +73,7 @@ class SiteMonitor:
                     # now we have the domain, can get all users
                     command = ("user", "list", "--os-domain-id", my_user["domain_id"])
                     all_users = self._run_command(command, scoped=False)
-                except SiteMonitorException as e:
+                except VmMonitorException as e:
                     click.secho(f"WARNING: Unable to get user list: {e}", fg="yellow")
             for user in all_users:
                 self.users[user["ID"]] = user
@@ -116,7 +116,7 @@ class SiteMonitor:
                 return result["volume_image_metadata"]["image_name"]
             else:
                 return "image name not found"
-        except SiteMonitorException:
+        except VmMonitorException:
             return "image name not found"
 
     def get_vm_image(self, vm_id, image_name, image_id, attached_volumes):
@@ -169,7 +169,7 @@ class SiteMonitor:
                         return self.get_vm_image_volume_show(attached_volumes[0]["id"])
                     else:
                         return "image name not found"
-            except SiteMonitorException:
+            except VmMonitorException:
                 if len(attached_volumes) > 0:
                     return self.get_vm_image_volume_show(attached_volumes[0]["id"])
                 else:
@@ -254,7 +254,7 @@ class SiteMonitor:
         elif protocol == "udp":
             command = f"ncat --udp --nodns --idle-timeout 3s {ip} {port}"
         else:
-            raise SiteMonitorException(f"Protocol {protocol} not supported!")
+            raise VmMonitorException(f"Protocol {protocol} not supported!")
         returncode, stdout, stderr = self._run_shell_command(command)
         return returncode, stdout, stderr
 

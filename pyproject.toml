@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fedcloud-monitoring-tools"
-version = "0.2.1"
+version = "0.3.0"
 description = "Monitoring fedcloud VMs and sites"
 authors = ["Giuseppe La Rocca <giuseppe.larocca@egi.eu>",
 	   "Sebastián Luna-Valero <sebastian.luna.valero@egi.eu>",
@@ -11,9 +11,9 @@ include = [
 ]
 
 [tool.poetry.scripts]
-fedcloud-vo-monitor = "fedcloud_monitoring_tools.vm_monitor_cli:main"
+fedcloud-vm-monitor = "fedcloud_monitoring_tools.vm_monitor_cli:main"
 fedcloud-sla-monitor = "fedcloud_monitoring_tools.sla_monitor_cli:main"
-fedcloud-vo-testing = "fedcloud_monitoring_tools.vo_mon_cli:main"
+fedcloud-vo-testing = "fedcloud_monitoring_tools.vo_test_cli:main"
 
 [tool.poetry.dependencies]
 python = "^3.12"
