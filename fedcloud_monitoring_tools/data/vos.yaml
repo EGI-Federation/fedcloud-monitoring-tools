@@ -66,19 +66,6 @@ AI4PUBLICPOLICY:
   - vo.ai4publicpolicy.eu
 CSCALE:
   - aquamonitor.c-scale.eu
-  - eval.c-scale.eu
-  - terrascope.c-scale.eu
-  - waterwatch.c-scale.eu
-  # these below are actually removed
-  - HighResLandSurf.c-scale.eu
-  - return.c-scale.eu
-  - coastmonitor.c-scale.eu
-  - in-sar-cubes.c-scale.eu
-  - plankton.c-scale.eu
-  - lost-salvage.c-scale.eu
-  - gltfca.c-scale.eu
-  - geohazards.c-scale.eu
-  - pangeo.c-scale.eu
 EISCAT3D:
   - eiscat.se
 BINARE:
