@@ -1,10 +1,10 @@
 """Classes to interact with the GOCDB"""
 
 import re
+from xml.parsers.expat import ExpatError
 
 import httpx
 import xmltodict
-from xml.parsers.expat import ExpatError
 
 GOC_PUBLIC_URL = "https://goc.egi.eu/gocdbpi/public/"
 GOC_PRIVATE_URL = "https://goc.egi.eu/gocdbpi/private/"
@@ -25,7 +25,7 @@ class GOCDB:
         self.queries += 1
         try:
             groups = xmltodict.parse(response.text)["results"]["SERVICE_GROUP"]
-        except ExpatError as e:
+        except ExpatError:
             print(f"\nXML to be parsed:\n{response.text}\n")
             exit("Cannot parse XML received from GOCDB.")
         return groups
