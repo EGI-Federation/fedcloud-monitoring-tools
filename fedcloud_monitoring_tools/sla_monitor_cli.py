@@ -114,7 +114,7 @@ def check_vo_sla(acct, fcis, goc, ops_portal, user_cert, vo_map, vo):
             bold=True,
         )
         click.echo("Sites in GOCDB: {}".format(sites_gocdb))
-        click.echo("Sites in AppDB: {}".format(sites_fcis))
+        click.echo("Sites in FedCloud IS: {}".format(sites_fcis))
         click.echo("Sites in Accounting Portal: {}".format(sites_acct))
         click.echo("Sites in fedcloudclient: {}".format(sites_fedcloudclient))
     click.echo("Accounting data per provider in the last {} days:".format(acct.days))
