@@ -24,7 +24,7 @@ class FedCloudIS:
             query = f"https://is.cloud.egi.eu/site/{site}/projects"
             r = requests.get(query)
             r.raise_for_status()
-        except requests.exceptions.HTTPError as err:
+        except requests.exceptions.HTTPError:
             return []
         data = r.json()
         if data:
