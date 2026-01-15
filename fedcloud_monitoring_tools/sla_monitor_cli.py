@@ -13,7 +13,7 @@ from fedcloudclient.sites import list_sites
 
 def check_site_slas(site, acct, fcis, goc, gocdb_sites):
     sla_vos = set()
-    fcis_vos = set(fcis.get_vo_for_site(site))
+    fcis_vos = set(fcis.get_vos_for_site(site))
     click.secho(f"[-] Checking site {site}", fg="blue", bold=True)
     if site not in gocdb_sites:
         click.echo(f"[I] {site} is not present in any SLA")

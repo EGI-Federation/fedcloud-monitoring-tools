@@ -19,7 +19,7 @@ class FedCloudIS:
             self.sites = self.get_sites_for_vo(vo)
         return site in self.sites
 
-    def get_vo_for_site(self, site):
+    def get_vos_for_site(self, site):
         try:
             query = f"https://is.cloud.egi.eu/site/{site}/projects"
             r = requests.get(query)
