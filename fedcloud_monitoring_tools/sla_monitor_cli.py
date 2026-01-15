@@ -5,7 +5,7 @@ import importlib
 import click
 import yaml
 from fedcloud_monitoring_tools.accounting import Accounting
-from fedcloud_monitoring_tools.appdb import AppDB
+from fedcloud_monitoring_tools.appdb import FedCloudIS
 from fedcloud_monitoring_tools.goc import GOCDB
 from fedcloud_monitoring_tools.operations_portal import OpsPortal
 from fedcloudclient.sites import list_sites
@@ -144,7 +144,7 @@ def main(
     vo_map = yaml.load(vo_map_src, Loader=yaml.SafeLoader)
     acct = Accounting()
     goc = GOCDB()
-    appdb = AppDB()
+    appdb = FedCloudIS()
     ops_portal = OpsPortal()
 
     if vo:
