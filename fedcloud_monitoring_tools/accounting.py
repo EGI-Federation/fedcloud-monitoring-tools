@@ -15,9 +15,9 @@ SITE_VO_ACCOUNTING = (
 
 
 class Accounting:
-    def __init__(self):
+    def __init__(self, days=ACCOUNTING_DAYS):
         self._data = {}
-        self.days = ACCOUNTING_DAYS
+        self.days = days
 
     def _get_accounting_data(self):
         """Gets accounting data for sites / vos over the last 90 days"""

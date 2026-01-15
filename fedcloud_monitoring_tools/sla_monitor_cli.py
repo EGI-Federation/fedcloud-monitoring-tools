@@ -74,7 +74,9 @@ def check_vo_sla(acct, fcis, goc, ops_portal, user_cert, vo_map, vo):
     all_vos_acct = acct.accounting_all_vos()
     if vo not in all_vos_acct:
         click.secho(
-            "[ERR] VO {} not found in Accounting Portal".format(vo), fg="red", bold=True
+            "[ERR] No accounting for VO {} in the last {} days".format(vo, acct.days),
+            fg="red",
+            bold=True,
         )
         return
     all_vos_ops_portal = ops_portal.get_vo_list()
@@ -128,11 +130,18 @@ def check_vo_sla(acct, fcis, goc, ops_portal, user_cert, vo_map, vo):
 @click.option("--vo", help="Monitor SLAs per VO")
 @click.option("--user-cert", required=True, help="User certificate (for GOCDB queries)")
 @click.option("--vo-map-file", help="SLA-VO mapping file")
+@click.option(
+    "--days",
+    default=90,
+    show_default=True,
+    help="Number of days to consider accounting information",
+)
 def main(
     site,
     vo,
     user_cert,
     vo_map_file,
+    days,
 ):
     if vo_map_file:
         with open(vo_map_file) as f:
@@ -142,7 +151,7 @@ def main(
             "fedcloud_monitoring_tools.data", "vos.yaml"
         )
     vo_map = yaml.load(vo_map_src, Loader=yaml.SafeLoader)
-    acct = Accounting()
+    acct = Accounting(days)
     goc = GOCDB()
     fcis = FedCloudIS()
     ops_portal = OpsPortal()
