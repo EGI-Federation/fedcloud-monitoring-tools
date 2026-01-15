@@ -2,8 +2,8 @@
 
 import requests
 
-class FedCloudIS:
 
+class FedCloudIS:
     def __init__(self):
         self.sites = {}
 
@@ -12,7 +12,6 @@ class FedCloudIS:
         r = requests.get(query)
         r.raise_for_status()
         data = r.json()
-        print(f">>>>> {r.url}")
         return [site["name"] for site in data]
 
     def vo_check(self, site, vo):
@@ -29,7 +28,7 @@ class FedCloudIS:
             return []
         data = r.json()
         if data:
-            return [vo["name"] for vo in data] 
+            return [vo["name"] for vo in data]
         else:
             return []
 
