@@ -1,7 +1,7 @@
 """VO-level testing"""
 
 import click
-from fedcloud_monitoring_tools.appdb import AppDB
+from fedcloud_monitoring_tools.fedcloud_is import FedCloudIS
 from fedcloud_monitoring_tools.vo_test import VOTest, VOTestException
 from fedcloudclient.decorators import oidc_params
 from fedcloudclient.sites import list_sites
@@ -24,10 +24,10 @@ from fedcloudclient.sites import list_sites
 )
 def main(site, vo, access_token, ssh_command):
     # gather all sites in a given VO
-    appdb = AppDB()
-    appdb_sites = appdb.get_sites_for_vo(vo)
+    fcis = FedCloudIS()
+    fcis_sites = fcis.get_sites_for_vo(vo)
     fedcloudclient_sites = list_sites(vo)
-    sites = [site] if site else set(appdb_sites + fedcloudclient_sites)
+    sites = [site] if site else set(fcis_sites + fedcloudclient_sites)
     for s in sites:
         click.secho(f"[.] Testing VO {vo} at {s}", fg="blue", bold=True)
         try:
