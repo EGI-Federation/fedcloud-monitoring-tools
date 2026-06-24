@@ -3,18 +3,21 @@ name: Check links
 
 on: [pull_request]
 
+permissions: read-all
+
 jobs:
   markdown-link-check:
     name: Check links using markdown-link-check
     runs-on: ubuntu-latest
 
     steps:
-      # Checks out a copy of your repository on the ubuntu-latest machine
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
 
       - name: Check links on new changes
-        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        uses: tcort/github-action-markdown-link-check@e7c7a18363c842693fadde5d41a3bd3573a7a225
         with:
           config-file: ".github/linters/mlc_config.json"
           check-modified-files-only: "yes"

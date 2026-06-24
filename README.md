@@ -71,6 +71,7 @@ usage of LDAP, but should work for most cases without changes.
 #### Sample output
 
 <!-- markdownlint-disable MD013 -->
+
 ```shell
 $ fedcloud-vm-monitor --vo cloud.egi.eu
 [.] Checking VO cloud.egi.eu at NCG-INGRID-PT
@@ -201,6 +202,7 @@ Getting VMs information  [####################################]  100%
 [-] WARNING: Less than 1 GB RAM per available CPU
 [-] WARNING: Less than 3 security groups per instance
 ```
+
 <!-- markdownlint-enable MD013 -->
 
 ## fedcloud-sla-monitor
@@ -227,8 +229,8 @@ The monitoring can be restricted to a specific site as well:
 fedcloud-sla-monitor --site SITE-NAME --user-cert /path/to/x509.pem
 ```
 
-Additionally, it is also possible to show SLA information
-per Virtual Organization instead:
+Additionally, it is also possible to show SLA information per Virtual
+Organization instead:
 
 ```shell
 fedcloud-sla-monitor --vo vo.name.eu --user-cert /path/to/x509.pem
@@ -237,18 +239,17 @@ fedcloud-sla-monitor --vo vo.name.eu --user-cert /path/to/x509.pem
 ## fedcloud-vo-testing
 
 `fedcloud-vo-testing` creates a test Virtual Machine using
-[IM-client](https://github.com/grycap/im-client) on a given
-VO and site. The goal is to quickly test whether an
-OpenStack tenant is correctly configured to deploy VMs
-using [Infrastructure Manager](https://im.egi.eu/).
+[IM-client](https://github.com/grycap/im-client) on a given VO and site. The
+goal is to quickly test whether an OpenStack tenant is correctly configured to
+deploy VMs using [Infrastructure Manager](https://im.egi.eu/).
 
 ### Requirements
 
 - A Check-in account member of the VOs to be monitored.
 - For running the tool, you just need a
-[valid Check-in token](https://docs.egi.eu/users/aai/check-in/obtaining-tokens/),
-the tool leverages
-[FedCloudClient Authentication](https://fedcloudclient.fedcloud.eu/usage.html#authentication).
+  [valid Check-in token](https://docs.egi.eu/users/aai/check-in/obtaining-tokens/),
+  the tool leverages
+  [FedCloudClient Authentication](https://fedcloudclient.fedcloud.eu/usage.html#authentication).
 
 ### Running the monitor
 

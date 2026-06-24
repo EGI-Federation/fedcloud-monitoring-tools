@@ -21,4 +21,4 @@ issue and context, and thereby help them prioritise it.
 <!-- the section below is optional - remove it if you don't know what to propose,
 but merely want to report an issue.  -->
 
-# Summary of proposed changes
+## Summary of proposed changes

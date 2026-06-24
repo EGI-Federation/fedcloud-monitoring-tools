@@ -125,7 +125,7 @@ class VOTest:
             result = c.run(ssh_command, hide=True)
             if result.ok:
                 click.secho(
-                    f"[+] Command '{result.command}' sucessfully executed with output: {result.stdout}",
+                    f"[+] Command '{result.command}' successfully executed with output: {result.stdout}",
                     fg="green",
                     bold=True,
                 )

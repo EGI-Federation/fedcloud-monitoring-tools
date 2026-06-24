@@ -34,7 +34,7 @@ def check_site_slas(site, acct, fcis, goc, gocdb_sites):
             else:
                 click.echo(f"[ERR] {site} has no configured VO for SLA {sla_name}")
             click.echo()
-    click.secho(f"[-] Checking aditional VOs at {site}", fg="yellow", bold=True)
+    click.secho(f"[-] Checking additional VOs at {site}", fg="yellow", bold=True)
     # Now check which VOs are being reported without a SLA
     if not sla_vos:
         sla_vos = goc.sla_vos
