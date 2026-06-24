@@ -73,9 +73,9 @@ further defined and clarified by project maintainers.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported by [contacting the EGI Foundation team](mailto:contact@egi.eu). The team will
-review and investigate all complaints, and will respond in a way that it deems
-appropriate to the circumstances. The team is obligated to maintain
+reported by [contacting the EGI Foundation team](mailto:contact@egi.eu). The
+team will review and investigate all complaints, and will respond in a way that
+it deems appropriate to the circumstances. The team is obligated to maintain
 confidentiality with regard to the reporter of an incident. Further details of
 specific enforcement policies may be posted separately.
 
